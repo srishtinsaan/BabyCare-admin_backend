@@ -1,11 +1,29 @@
 import express from "express";
 import cors from "cors";
-import adminRoutes from "./routes/admin.routes.js";
+import dotenv from "dotenv";
+import { PrismaClient } from "@prisma/client";
+
+dotenv.config();
 
 const app = express();
-app.use(express.json());
+const prisma = new PrismaClient();
+
+// Check DB connection
+prisma.$connect()
+  .then(() => console.log("Database connected successfully!"))
+  .catch((err) => {
+    console.error("Database connection failed", err);
+  });
+
+
 app.use(cors());
+app.use(express.json());
 
-app.use("/admin", adminRoutes);
+// Test route
+app.get("/", (req, res) => {
+  res.send("Admin Backend Running");
+});
 
-app.listen(5001, () => console.log("Admin Backend Running on 5001"));
+const PORT = process.env.PORT || 8000;
+
+app.listen(PORT, () => console.log("Admin backend running on " + PORT));
