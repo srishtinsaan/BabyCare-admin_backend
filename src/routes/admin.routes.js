@@ -1,31 +1,9 @@
-import jwt from "jsonwebtoken";
-import axios from "axios";
+import { Router } from "express";
+import { updateUserImage } from "../controllers/admin.controller.js";
+import {upload} from "../middlewares/multer.js";
 
-export const loginAdmin = (req, res) => {
-    const { email, password } = req.body;
+const router = Router();
 
-    if (email === "admin@babycare.com" && password === "admin123") {
-        const token = jwt.sign({ role: "admin" }, "secret123", { expiresIn: "24h" });
-        return res.json({ token });
-    }
+router.post("/about", upload.single("image"), updateUserImage)
 
-    res.status(401).json({ msg: "Invalid Admin Credentials" });
-};
-
-// forward requests to main backend
-export const forwardRequest = async (req, res) => {
-    try {
-        const mainBackendURL = "http://localhost:5000";
-
-        const response = await axios({
-            method: req.method,
-            url: mainBackendURL + req.originalUrl.replace("/forward", ""),
-            data: req.body
-        });
-
-        res.json(response.data);
-
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+export default router;

@@ -1,29 +1,31 @@
-import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
+import {connectDB} from "./db/db.js"
+import app from "./app.js"
 
-dotenv.config();
-
-const app = express();
-const prisma = new PrismaClient();
-
-// Check DB connection
-prisma.$connect()
-  .then(() => console.log("Database connected successfully!"))
-  .catch((err) => {
-    console.error("Database connection failed", err);
-  });
+dotenv.config({path : './.env'});
 
 
-app.use(cors());
-app.use(express.json());
+connectDB()
+.then(() => {
+    app.on("error", (error) => {
+        console.log("ERROR ::", error); 
+        throw error
+    })
+    app.listen(process.env.PORT || 8000, () => {
+        console.log(`server is running at port : 
+            ${process.env.PORT}`);
+        
+    })
+})
+.catch((error) => {
+    console.log("Postgres Connection FAILED !!!", error);
+    
+})
 
-// Test route
-app.get("/", (req, res) => {
-  res.send("Admin Backend Running");
-});
 
-const PORT = process.env.PORT || 8000;
 
-app.listen(PORT, () => console.log("Admin backend running on " + PORT));
+
+
+
+
+

@@ -1,31 +1,38 @@
-import jwt from "jsonwebtoken";
-import axios from "axios";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { ApiError } from "../utils/ApiError.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { prisma } from "../db/db.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
-export const loginAdmin = (req, res) => {
-    const { email, password } = req.body;
+const updateUserImage = asyncHandler(async (req, res) => {
+  const imageLocalPath = req.file?.path;
 
-    if (email === "admin@babycare.com" && password === "admin123") {
-        const token = jwt.sign({ role: "admin" }, "secret123", { expiresIn: "24h" });
-        return res.json({ token });
+  if (!imageLocalPath) {
+    throw new ApiError(401, "Cover Image file is missing");
+  }
+
+  const uploadedImage = await uploadOnCloudinary(imageLocalPath);
+
+  if (!uploadedImage?.url) {
+    throw new ApiError(401, "Error while uploading cover image");
+  }
+
+
+  // delete existing image (only 1 allowed)
+  await prisma.image.deleteMany();
+
+  // insert new record
+  const newImage = await prisma.image.create({
+    data: {
+      imageUrl: uploadedImage.url,
+      publicId: uploadedImage.public_id,
     }
 
-    res.status(401).json({ msg: "Invalid Admin Credentials" });
-};
+  });
 
-// forward requests to main backend
-export const forwardRequest = async (req, res) => {
-    try {
-        const mainBackendURL = "http://localhost:5000";
+  return res
+    .status(200)
+    .json(new ApiResponse(200, newImage, "Cover Image updated successfully"));
+});
 
-        const response = await axios({
-            method: req.method,
-            url: mainBackendURL + req.originalUrl.replace("/forward", ""),
-            data: req.body
-        });
-
-        res.json(response.data);
-
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+export { updateUserImage };

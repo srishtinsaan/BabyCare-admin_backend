@@ -14,3 +14,14 @@ datasource db {
 }
 
 
+  model Image {
+    id        Int      @id @default(autoincrement())
+    title     String?  // optional title: "Home Hero Banner", "Offer Banner", etc
+    imageUrl  String   // actual stored URL (from Cloudinary / S3 / Uploads)
+    publicId String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+  }
+
+
+
