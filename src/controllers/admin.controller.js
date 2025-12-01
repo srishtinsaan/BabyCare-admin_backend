@@ -32,7 +32,7 @@ const updateUserImage = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, newImage, "Cover Image updated successfully"));
+    .json(new ApiResponse(200, newImage, "Image updated successfully"));
 });
 
 export { updateUserImage };

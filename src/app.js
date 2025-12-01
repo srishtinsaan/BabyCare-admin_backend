@@ -20,6 +20,11 @@ app.get("/", (req, res) => {
   res.send("Admin Backend Running");
 });
 
+app.get("/about", (req, res) => {
+  res.send("About route is working!");
+});
+
+
 app.post("/about", aboutRoutes);
 
 

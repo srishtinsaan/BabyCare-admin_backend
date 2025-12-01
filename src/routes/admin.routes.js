@@ -6,4 +6,6 @@ const router = Router();
 
 router.post("/about", upload.single("image"), updateUserImage)
 
+
+
 export default router;
