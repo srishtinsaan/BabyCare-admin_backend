@@ -5,13 +5,8 @@ import { prisma } from "../db/db.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const updateUserImage = asyncHandler(async (req, res) => {
-  const imageLocalPath = req.file?.path;
+  const uploadedImage = await uploadOnCloudinary(req.file.buffer);
 
-  if (!imageLocalPath) {
-    throw new ApiError(401, "Cover Image file is missing");
-  }
-
-  const uploadedImage = await uploadOnCloudinary(imageLocalPath);
 
   if (!uploadedImage?.url) {
     throw new ApiError(401, "Error while uploading cover image");
