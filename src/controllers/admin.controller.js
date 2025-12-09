@@ -30,4 +30,18 @@ const updateUserImage = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, newImage, "Image updated successfully"));
 });
 
+const getUserImage = asyncHandler(async (req,res) => {
+
+  const latestImage = await prisma.image.findFirst({
+    orderBy: { createdAt: "desc" }, // latest uploaded image
+  });
+
+  if (!latestImage) {
+    return res.status(404).json(new ApiResponse(404, { imageUrl: null }, "No image found"));
+  }
+
+  res.status(200)
+  .json(new ApiResponse(200, { imageUrl: latestImage.imageUrl }, "Fetched successfully"));
+})
+
 export { updateUserImage };
