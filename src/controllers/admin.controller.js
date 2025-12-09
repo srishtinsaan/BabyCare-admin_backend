@@ -44,4 +44,4 @@ const getUserImage = asyncHandler(async (req,res) => {
   .json(new ApiResponse(200, { imageUrl: latestImage.imageUrl }, "Fetched successfully"));
 })
 
-export { updateUserImage };
+export { updateUserImage, getUserImage };
