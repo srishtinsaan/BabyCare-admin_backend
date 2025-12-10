@@ -22,6 +22,5 @@ router.post("/paragraph", updateParagraph);
 router.post("/right-image", upload.single("image"), updateRightImage);
 router.post("/bg-image", upload.single("image"), updateBgImage);
 
-router.post("/", upload.single("image"), updateBgImage);
 
 export default router;

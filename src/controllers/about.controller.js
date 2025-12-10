@@ -81,15 +81,24 @@ const updateRightImage = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Error uploading right image");
   }
 
-  const about = await prisma.about.upsert({
-    where: { id: 1 },
-    update: {
-      imageUrl: uploadedImage.url,
-    },
-    create: {
-      imageUrl: uploadedImage.url,
-    }
+  const aboutRow = await prisma.aboutModel.findFirst({
+      orderBy: { createdAt: "desc" }
   });
+
+  let about;
+
+  if (aboutRow) {
+  // update existing row
+      about = await prisma.aboutModel.update({
+        where: { id: aboutRow.id },
+        data: { rightImageUrl: uploadedImage.url },
+      });
+  } else {
+  // create new row
+      about = await prisma.aboutModel.create({
+        data: { rightImageUrl: uploadedImage.url },
+  });
+}
 
   res.status(200).json(
     new ApiResponse(200, about, "Right image updated successfully")
