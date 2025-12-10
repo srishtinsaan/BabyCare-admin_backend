@@ -5,20 +5,28 @@ import { prisma } from "../db/db.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const getAboutData = asyncHandler(async (req, res) => {
-  const about = await prisma.about.findFirst({
-    orderBy: { createdAt: "desc" }
-  });
+  try {
+    const about = await prisma.aboutModel.findFirst({
+      orderBy: { createdAt: "desc" }
+    });
 
-  if (!about) {
-    return res
-      .status(200)
-      .json(new ApiResponse(200, { }, "No about section found"));
+    if (!about) {
+      return res.status(200).json(
+        new ApiResponse(200, {}, "No about section found")
+      );
+    }
+
+    return res.status(200).json(
+      new ApiResponse(200, about, "Fetched successfully")
+    );
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json(
+      new ApiResponse(500, {}, "Server error")
+    );
   }
-
-  return res
-    .status(200)
-    .json(new ApiResponse(200, about, "Fetched successfully"));
 });
+
 
 const updateHeading = asyncHandler(async (req, res) => {
   const { heading } = req.body;
