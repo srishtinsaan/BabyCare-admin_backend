@@ -27,11 +27,26 @@ const updateHeading = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Heading cannot be empty");
   }
 
-  const about = await prisma.about.upsert({
-    where: { id: 1 },
-    update: { heading },
-    create: { heading },
+  // Find latest About row
+  const aboutRow = await prisma.aboutModel.findFirst({
+    orderBy: { createdAt: "desc" },
   });
+
+  let about;
+
+  if (aboutRow) {
+    // Update existing row
+    about = await prisma.aboutModel.update({
+      where: { id: aboutRow.id },
+      data: { heading },
+    });
+  } else {
+    // Create new row
+    about = await prisma.aboutModel.create({
+      data: { heading },
+    });
+  }
+
 
   return res
     .status(200)
@@ -45,11 +60,26 @@ const updateSubHeading = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Sub-heading cannot be empty");
   }
 
-  const about = await prisma.about.upsert({
-    where: { id: 1 },
-    update: { subHeading },
-    create: { subHeading },
+  // Find latest About row
+  const aboutRow = await prisma.aboutModel.findFirst({
+    orderBy: { createdAt: "desc" },
   });
+
+  let about;
+
+  if (aboutRow) {
+    // Update existing row
+    about = await prisma.aboutModel.update({
+      where: { id: aboutRow.id },
+      data: { subHeading },
+    });
+  } else {
+    // Create new row
+    about = await prisma.aboutModel.create({
+      data: { subHeading },
+    });
+  }
+
 
   return res
     .status(200)
@@ -63,15 +93,29 @@ const updateParagraph = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Paragraph cannot be empty");
   }
 
-  const about = await prisma.about.upsert({
-    where: { id: 1 },
-    update: { paragraph },
-    create: { paragraph },
+  // Find latest About row
+  const aboutRow = await prisma.aboutModel.findFirst({
+    orderBy: { createdAt: "desc" },
   });
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, about, "Paragraph updated successfully"));
+  let about;
+
+  if (aboutRow) {
+    // Update existing row
+    about = await prisma.aboutModel.update({
+      where: { id: aboutRow.id },
+      data: { paragraph },
+    });
+  } else {
+    // Create new row
+    about = await prisma.aboutModel.create({
+      data: { paragraph },
+    });
+  }
+
+  res.status(200).json(
+    new ApiResponse(200, about, "Paragraph updated successfully")
+  );
 });
 
 const updateRightImage = asyncHandler(async (req, res) => {
@@ -112,20 +156,30 @@ const updateBackgroundImage = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Error uploading background image");
   }
 
-  const about = await prisma.about.upsert({
-    where: { id: 1 },
-    update: {
-      bgImageUrl: uploadedImage.url,
-    },
-    create: {
-      bgImageUrl: uploadedImage.url,
-    }
+  const aboutRow = await prisma.aboutModel.findFirst({
+      orderBy: { createdAt: "desc" }
+  });
+
+  let about;
+
+  if (aboutRow) {
+  // update existing row
+      about = await prisma.aboutModel.update({
+        where: { id: aboutRow.id },
+        data: { bgImageUrl: uploadedImage.url },
+      });
+  } else {
+  // create new row
+      about = await prisma.aboutModel.create({
+        data: { bgImageUrl: uploadedImage.url },
   });
 
   res.status(200).json(
     new ApiResponse(200, about, "Background image updated successfully")
   );
-});
+}
+})
+
 
 
 
