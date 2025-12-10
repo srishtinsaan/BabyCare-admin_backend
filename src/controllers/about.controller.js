@@ -27,7 +27,6 @@ const getAboutData = asyncHandler(async (req, res) => {
   }
 });
 
-
 const updateHeading = asyncHandler(async (req, res) => {
   const { heading } = req.body;
 
