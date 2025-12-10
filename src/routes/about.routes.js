@@ -6,7 +6,7 @@ import {
   updateSubHeading,
   updateParagraph,
   updateRightImage,
-  updateBgImage
+  updateBackgroundImage
 } from "../controllers/about.controller.js";
 
 import {upload} from "../middlewares/multer.js";
@@ -20,7 +20,7 @@ router.post("/subheading", updateSubHeading);
 router.post("/paragraph", updateParagraph);
 
 router.post("/right-image", upload.single("image"), updateRightImage);
-router.post("/bg-image", upload.single("image"), updateBgImage);
+router.post("/bg-image", upload.single("image"), updateBackgroundImage);
 
 
 export default router;
