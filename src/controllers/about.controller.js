@@ -1,14 +1,12 @@
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-import { prisma } from "../db/db.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import {About} from "../model/about.model.js"
 
 const getAboutData = asyncHandler(async (req, res) => {
   try {
-    const about = await prisma.aboutModel.findFirst({
-      orderBy: { createdAt: "desc" }
-    });
+    const about = await About.findOne().sort({ createdAt: -1 })
 
     if (!about) {
       return res.status(200).json(
@@ -35,23 +33,16 @@ const updateHeading = asyncHandler(async (req, res) => {
   }
 
   // Find latest About row
-  const aboutRow = await prisma.aboutModel.findFirst({
-    orderBy: { createdAt: "desc" },
-  });
+  let about = About.findOne().sort({ createdAt: -1 })
 
-  let about;
-
-  if (aboutRow) {
-    // Update existing row
-    about = await prisma.aboutModel.update({
-      where: { id: aboutRow.id },
-      data: { heading },
-    });
+  
+  if (about) {
+    // Update existing document
+    about.heading = heading;
+    await about.save();
   } else {
-    // Create new row
-    about = await prisma.aboutModel.create({
-      data: { heading },
-    });
+    // Create new document
+    about = await About.create({ heading });
   }
 
 
@@ -68,23 +59,15 @@ const updateSubHeading = asyncHandler(async (req, res) => {
   }
 
   // Find latest About row
-  const aboutRow = await prisma.aboutModel.findFirst({
-    orderBy: { createdAt: "desc" },
-  });
+  let about = await About.findOne().sort({ createdAt: -1 });
 
-  let about;
-
-  if (aboutRow) {
-    // Update existing row
-    about = await prisma.aboutModel.update({
-      where: { id: aboutRow.id },
-      data: { subHeading },
-    });
+  if (about) {
+    // Update existing document
+    about.subHeading = subHeading;
+    await about.save();
   } else {
-    // Create new row
-    about = await prisma.aboutModel.create({
-      data: { subHeading },
-    });
+    // Create new document
+    about = await About.create({ subHeading });
   }
 
 
@@ -101,23 +84,15 @@ const updateParagraph = asyncHandler(async (req, res) => {
   }
 
   // Find latest About row
-  const aboutRow = await prisma.aboutModel.findFirst({
-    orderBy: { createdAt: "desc" },
-  });
+  let about = await About.findOne().sort({ createdAt: -1 });
 
-  let about;
-
-  if (aboutRow) {
-    // Update existing row
-    about = await prisma.aboutModel.update({
-      where: { id: aboutRow.id },
-      data: { paragraph },
-    });
+  if (about) {
+    // Update existing document
+    about.paragraph = paragraph;
+    await about.save();
   } else {
-    // Create new row
-    about = await prisma.aboutModel.create({
-      data: { paragraph },
-    });
+    // Create new document
+    about = await About.create({ paragraph });
   }
 
   res.status(200).json(
@@ -132,24 +107,21 @@ const updateRightImage = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Error uploading right image");
   }
 
-  const aboutRow = await prisma.aboutModel.findFirst({
-      orderBy: { createdAt: "desc" }
-  });
+  
 
-  let about;
+  let about = await About.findOne().sort({ createdAt: -1 });
 
-  if (aboutRow) {
-  // update existing row
-      about = await prisma.aboutModel.update({
-        where: { id: aboutRow.id },
-        data: { rightImageUrl: uploadedImage.url },
-      });
+  if (about) {
+    // Update existing document
+    about.rightImageUrl = uploadedImage.url;
+    await about.save();
   } else {
-  // create new row
-      about = await prisma.aboutModel.create({
-        data: { rightImageUrl: uploadedImage.url },
-  });
-}
+    // Create new document
+    about = await About.create({
+      rightImageUrl: uploadedImage.url,
+    });
+  }
+
 
   res.status(200).json(
     new ApiResponse(200, about, "Right image updated successfully")
@@ -163,28 +135,24 @@ const updateBackgroundImage = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Error uploading background image");
   }
 
-  const aboutRow = await prisma.aboutModel.findFirst({
-      orderBy: { createdAt: "desc" }
-  });
 
-  let about;
+  let about = await About.findOne().sort({ createdAt: -1 });
 
-  if (aboutRow) {
-  // update existing row
-      about = await prisma.aboutModel.update({
-        where: { id: aboutRow.id },
-        data: { bgImageUrl: uploadedImage.url },
-      });
+  if (about) {
+    // Update existing document
+    about.bgImageUrl = uploadedImage.url;
+    await about.save();
   } else {
-  // create new row
-      about = await prisma.aboutModel.create({
-        data: { bgImageUrl: uploadedImage.url },
-  });
+    // Create new document
+    about = await About.create({
+      bgImageUrl: uploadedImage.url,
+    });
+  }
+
 
   res.status(200).json(
     new ApiResponse(200, about, "Background image updated successfully")
   );
-}
 })
 
 

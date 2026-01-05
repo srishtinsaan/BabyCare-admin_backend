@@ -1,11 +1,9 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import mongoose from "mongoose"
 
 const connectDB = async () => {
     try {
-        await prisma.$connect()
-        console.log("Database connected successfully!")
+        const connectionInstance = await mongoose.connect(`${process.env.DATABASE_URL}`)
+        console.log(`\n MongoDB connected !! DB HOST : ${connectionInstance.connection.host}`);
             
     
     } catch (error) {
@@ -14,7 +12,7 @@ const connectDB = async () => {
     }
 }
 
-export  {connectDB, prisma}
+export  {connectDB}
 
 // Check DB connection
 
