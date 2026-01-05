@@ -18,7 +18,7 @@ connectDB()
     })
 })
 .catch((error) => {
-    console.log("Postgres Connection FAILED !!!", error);
+    console.log("Mongoose Connection FAILED !!!", error);
     
 })
 
