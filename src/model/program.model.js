@@ -9,10 +9,6 @@ const programItemSchema = new Schema({
     type: String,
     required: true,
   },
-  imageUrl: {
-    type: String,
-    default: null,
-  },
   price: {
     type: Number,
     default: null,
@@ -37,6 +33,11 @@ const programItemSchema = new Schema({
     type: String,
     default: null,
   },
+  imageUrl : {
+    type: String,
+    default: null,
+  }
+
 });
 
 const programSchema = new Schema(
