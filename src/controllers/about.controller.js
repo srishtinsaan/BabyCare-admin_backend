@@ -33,17 +33,15 @@ const updateHeading = asyncHandler(async (req, res) => {
   }
 
   // Find latest About row
-  let about = About.findOne().sort({ createdAt: -1 })
-
-  
-  if (about) {
-    // Update existing document
-    about.heading = heading;
-    await about.save();
-  } else {
-    // Create new document
-    about = await About.create({ heading });
+  const about = await About.findOneAndUpdate(
+  {},
+  { heading },
+  {
+    sort: { createdAt: -1 },
+    new: true,
+    upsert: true,
   }
+);
 
 
   return res
