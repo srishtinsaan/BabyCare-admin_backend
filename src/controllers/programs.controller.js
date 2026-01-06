@@ -92,33 +92,40 @@ const updateProgramItem = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Program item not found");
   }
 
-  if (req.file) {
-    const uploadedImage = await uploadOnCloudinary(req.file.buffer);
-
+  // Upload main program image if provided
+  if (req.files?.image) {
+    const uploadedImage = await uploadOnCloudinary(req.files.image[0].buffer);
     if (!uploadedImage?.url) {
-      throw new ApiError(500, "Image upload failed");
+      throw new ApiError(500, "Program image upload failed");
     }
-
     programItem.imageUrl = uploadedImage.url;
   }
 
-  const allowedFields = [
-  "title",
-  "description",
-  "price",
-  "seats",
-  "lessons",
-  "hours",
-  "teacher_name",
-  "teacher_role"
-];
-
-allowedFields.forEach((field) => {
-  if (updateData[field] !== undefined) {
-    programItem[field] = updateData[field];
+  // Upload teacher image if provided
+  if (req.files?.teacherImg) {
+    const uploadedTeacherImg = await uploadOnCloudinary(req.files.teacherImg[0].buffer);
+    if (!uploadedTeacherImg?.url) {
+      throw new ApiError(500, "Teacher image upload failed");
+    }
+    programItem.teacherImg = uploadedTeacherImg.url;
   }
-});
 
+  // Update other allowed fields
+  const allowedFields = [
+    "title",
+    "description",
+    "price",
+    "seats",
+    "lessons",
+    "hours",
+    "teacher_name",
+  ];
+
+  allowedFields.forEach((field) => {
+    if (updateData[field] !== undefined) {
+      programItem[field] = updateData[field];
+    }
+  });
 
   await programDoc.save();
 
@@ -126,6 +133,7 @@ allowedFields.forEach((field) => {
     new ApiResponse(200, programItem, "Program updated successfully")
   );
 });
+
 
 export {
   getPrograms,

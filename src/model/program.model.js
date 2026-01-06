@@ -29,7 +29,7 @@ const programItemSchema = new Schema({
     type: String,
     default: null,
   },
-  teacher_role: {
+  teacherImg: {
     type: String,
     default: null,
   },

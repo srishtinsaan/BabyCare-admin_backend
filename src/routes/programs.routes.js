@@ -15,7 +15,9 @@ router.post("/", getPrograms)
 
 router.post("/heading", updateHeading);
 router.post("/subheading", updateSubHeading);
-router.patch("/item/:programId", upload.single("image"), updateProgramItem);
+router.patch("/item/:programId", upload.fields([
+  { name: "image", maxCount: 1 },
+  { name: "teacherImg", maxCount: 1 }]), updateProgramItem);
 
 
 export default router;
