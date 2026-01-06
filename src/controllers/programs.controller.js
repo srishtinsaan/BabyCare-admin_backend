@@ -5,7 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import Program from "../model/program.model.js"
 
 const getPrograms = asyncHandler(async (req, res) => {
-  const program = await Program.find().sort({ createdAt: -1 });
+  const program = await Program.findOne().sort({ createdAt: -1 });
 
   if (!program) {
     return res.status(200).json(
@@ -20,14 +20,18 @@ const getPrograms = asyncHandler(async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
 
   return res.status(200).json(
-    new ApiResponse(200, programs, "Program fetched successfully")
+    new ApiResponse(200, program, "Program fetched successfully")
   );
 });
 
 const addProgramItem = asyncHandler(async (req, res) => {
+
+  if (!req.body?.title) {
+    throw new ApiError(400, "Title is required");
+  }
+
   let programDoc = await Program.findOne().sort({ createdAt: -1 });
 
-  // agar page hi nahi bana
   if (!programDoc) {
     programDoc = await Program.create({
       heading: "",
@@ -41,17 +45,17 @@ const addProgramItem = asyncHandler(async (req, res) => {
 
   if (req.files?.image?.[0]) {
     const uploaded = await uploadOnCloudinary(req.files.image[0].buffer);
-    imageUrl = uploaded?.url;
+    imageUrl = uploaded?.url || null;
   }
 
   if (req.files?.teacherImg?.[0]) {
     const uploaded = await uploadOnCloudinary(req.files.teacherImg[0].buffer);
-    teacherImg = uploaded?.url;
+    teacherImg = uploaded?.url || null;
   }
 
   const newProgram = {
     title: req.body.title,
-    description: req.body.description,
+    description: req.body.description || "",
     price: req.body.price || null,
     seats: req.body.seats || null,
     lessons: req.body.lessons || null,
@@ -68,7 +72,6 @@ const addProgramItem = asyncHandler(async (req, res) => {
     new ApiResponse(201, programDoc.programs, "Program item added")
   );
 });
-
 
 const updateHeading = asyncHandler(async (req, res) => {
   const { heading } = req.body;
