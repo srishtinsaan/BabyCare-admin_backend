@@ -26,6 +26,12 @@ const getPrograms = asyncHandler(async (req, res) => {
 
 const addProgramItem = asyncHandler(async (req, res) => {
 
+  console.log("===> ADD PROGRAM HIT", { url: req.originalUrl, method: req.method });
+console.log("Content-Type:", req.headers["content-type"]);
+console.log("BODY:", req.body);
+console.log("FILES:", Object.keys(req.files || {}));
+if (req.files) console.log("FILES DETAIL:", req.files)
+
   if (!req.body?.title) {
     throw new ApiError(400, "Title is required");
   }
@@ -123,6 +129,12 @@ const updateSubHeading = asyncHandler(async (req, res) => {
 });
 
 const updateProgramItem = asyncHandler(async (req, res) => {
+  console.log("===> ADD PROGRAM HIT", { url: req.originalUrl, method: req.method });
+console.log("Content-Type:", req.headers["content-type"]);
+console.log("BODY:", req.body);
+console.log("FILES:", Object.keys(req.files || {}));
+if (req.files) console.log("FILES DETAIL:", req.files)
+  
   const { programId } = req.params;
   const updateData = req.body;
 
