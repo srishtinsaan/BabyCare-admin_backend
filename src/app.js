@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-// import homeRoutes from "./routes/home.routes.js";
+import homeRoutes from "./routes/home.routes.js";
 import aboutRoutes from "./routes/about.routes.js";
 // import programsRoutes from "./routes/programs.routes.js";
 // import eventsRoutes from "./routes/events.routes.js";
@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 
 
 // real routes
-// app.use("/home", homeRoutes);
+app.use("/home", homeRoutes);
 app.use("/about", aboutRoutes);
 // app.use("/programs", programsRoutes);
 // app.use("/events", eventsRoutes);
