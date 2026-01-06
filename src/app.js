@@ -3,7 +3,7 @@ import cors from "cors";
 
 import homeRoutes from "./routes/home.routes.js";
 import aboutRoutes from "./routes/about.routes.js";
-// import programsRoutes from "./routes/programs.routes.js";
+import programsRoutes from "./routes/programs.routes.js";
 // import eventsRoutes from "./routes/events.routes.js";
 // import blogsRoutes from "./routes/blogs.routes.js";
 // import teamRoutes from "./routes/team.routes.js";
@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
 // real routes
 app.use("/home", homeRoutes);
 app.use("/about", aboutRoutes);
-// app.use("/programs", programsRoutes);
+app.use("/programs", programsRoutes);
 // app.use("/events", eventsRoutes);
 // app.use("/blogs", blogsRoutes);
 // app.use("/team", teamRoutes);

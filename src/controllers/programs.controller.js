@@ -4,6 +4,26 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import Program from "../model/program.model.js"
 
+const getPrograms = asyncHandler(async (req, res) => {
+  const program = await Program.findOne().sort({ createdAt: -1 });
+
+  if (!program) {
+    return res.status(200).json(
+      new ApiResponse(200, {
+        heading: "",
+        subHeading: "",
+        programs: []
+      }, "No program data")
+    );
+  }
+
+  res.setHeader("Cache-Control", "no-store");
+
+  return res.status(200).json(
+    new ApiResponse(200, program, "Program fetched successfully")
+  );
+});
+
 
 const updateHeading = asyncHandler(async (req, res) => {
   const { heading } = req.body;
@@ -108,6 +128,7 @@ allowedFields.forEach((field) => {
 });
 
 export {
+  getPrograms,
     updateHeading,
     updateSubHeading,
     updateProgramItem
