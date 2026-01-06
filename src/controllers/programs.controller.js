@@ -20,7 +20,11 @@ const getPrograms = asyncHandler(async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
 
   return res.status(200).json(
-    new ApiResponse(200, program, "Program fetched successfully")
+    new ApiResponse(200, {
+      heading: program.heading || "",
+      subHeading: program.subHeading || "",
+      programs: program.programs || []
+    }, "Program fetched successfully")
   );
 });
 
