@@ -4,7 +4,8 @@ import {
   getPrograms,
   updateHeading,
   updateSubHeading,
-  updateProgramItem
+  updateProgramItem,
+  addProgramItem
 } from "../controllers/programs.controller.js";
 
 import {upload} from "../middlewares/multer.js";
@@ -15,9 +16,9 @@ router.get("/", getPrograms)
 
 router.post("/heading", updateHeading);
 router.post("/subheading", updateSubHeading);
-router.patch("/item/:programId", upload.fields([
+router.patch("/item", upload.fields([
   { name: "image", maxCount: 1 },
-  { name: "teacherImg", maxCount: 1 }]), updateProgramItem);
+  { name: "teacherImg", maxCount: 1 }]), addProgramItem);
 
 
 export default router;

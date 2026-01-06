@@ -5,7 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import Program from "../model/program.model.js"
 
 const getPrograms = asyncHandler(async (req, res) => {
-  const program = await Program.findOne().sort({ createdAt: -1 });
+  const program = await Program.find().sort({ createdAt: -1 });
 
   if (!program) {
     return res.status(200).json(
@@ -20,11 +20,52 @@ const getPrograms = asyncHandler(async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
 
   return res.status(200).json(
-    new ApiResponse(200, {
-      heading: program.heading || "",
-      subHeading: program.subHeading || "",
-      programs: program.programs || []
-    }, "Program fetched successfully")
+    new ApiResponse(200, programs, "Program fetched successfully")
+  );
+});
+
+const addProgramItem = asyncHandler(async (req, res) => {
+  let programDoc = await Program.findOne().sort({ createdAt: -1 });
+
+  // agar page hi nahi bana
+  if (!programDoc) {
+    programDoc = await Program.create({
+      heading: "",
+      subHeading: "",
+      programs: []
+    });
+  }
+
+  let imageUrl = null;
+  let teacherImg = null;
+
+  if (req.files?.image?.[0]) {
+    const uploaded = await uploadOnCloudinary(req.files.image[0].buffer);
+    imageUrl = uploaded?.url;
+  }
+
+  if (req.files?.teacherImg?.[0]) {
+    const uploaded = await uploadOnCloudinary(req.files.teacherImg[0].buffer);
+    teacherImg = uploaded?.url;
+  }
+
+  const newProgram = {
+    title: req.body.title,
+    description: req.body.description,
+    price: req.body.price || null,
+    seats: req.body.seats || null,
+    lessons: req.body.lessons || null,
+    hours: req.body.hours || null,
+    teacher_name: req.body.teacher_name || null,
+    imageUrl,
+    teacherImg
+  };
+
+  programDoc.programs.push(newProgram);
+  await programDoc.save();
+
+  return res.status(201).json(
+    new ApiResponse(201, programDoc.programs, "Program item added")
   );
 });
 
@@ -140,7 +181,7 @@ const updateProgramItem = asyncHandler(async (req, res) => {
 
 
 export {
-  getPrograms,
+  getPrograms,addProgramItem,
     updateHeading,
     updateSubHeading,
     updateProgramItem
