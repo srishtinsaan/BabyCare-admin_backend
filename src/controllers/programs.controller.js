@@ -54,7 +54,7 @@ const addProgramItem = asyncHandler(async (req, res) => {
   }
 
   const newProgram = {
-    title: req.body.title,
+    title: req.body.title || "",
     description: req.body.description || "",
     price: req.body.price || null,
     seats: req.body.seats || null,
