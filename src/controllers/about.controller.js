@@ -6,6 +6,9 @@ import About from "../model/about.model.js"
 
 const getAboutData = asyncHandler(async (req, res) => {
   try {
+
+    res.setHeader("Cache-Control", "no-store");
+
     const about = await About.findOne().sort({ createdAt: -1 })
 
     if (!about) {
@@ -13,6 +16,7 @@ const getAboutData = asyncHandler(async (req, res) => {
         new ApiResponse(200, {}, "No about section found")
       );
     }
+    res.setHeader("Cache-Control", "no-store");
 
     return res.status(200).json(
       new ApiResponse(200, about, "Fetched successfully")
