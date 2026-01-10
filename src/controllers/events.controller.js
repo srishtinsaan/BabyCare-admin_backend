@@ -58,9 +58,9 @@ if (req.files) console.log("FILES DETAIL:", req.files)
   const newEvent = {
     title: req.body.title || "",
     description: req.body.description || "",
-    date: req.body.date || null,
-    time: req.body.time || null,
-    location: req.body.location || null,
+    date: req.body.date ||"",
+    time: req.body.time || "",
+    location: req.body.location || "",
     imageUrl,
   };
 
