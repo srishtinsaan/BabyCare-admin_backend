@@ -6,6 +6,8 @@ import aboutRoutes from "./routes/about.routes.js";
 import programsRoutes from "./routes/programs.routes.js";
 import eventsRoutes from "./routes/events.routes.js";
 import blogsRoutes from "./routes/blogs.routes.js";
+import servicesRoutes from "./routes/services.routes.js";
+
 // import teamRoutes from "./routes/team.routes.js";
 // import testimonialsRoutes from "./routes/testimonials.routes.js";
 
@@ -34,6 +36,7 @@ app.use("/about", aboutRoutes);
 app.use("/programs", programsRoutes);
 app.use("/events", eventsRoutes);
 app.use("/blogs", blogsRoutes);
+app.use("/services", servicesRoutes);
 // app.use("/team", teamRoutes);
 // app.use("/testimonials", testimonialsRoutes);
 
