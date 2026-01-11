@@ -32,8 +32,8 @@ console.log("BODY:", req.body);
 console.log("FILES:", Object.keys(req.files || {}));
 if (req.files) console.log("FILES DETAIL:", req.files)
 
-  if (!req.body?.title) {
-    throw new ApiError(400, "Title is required");
+  if (!req.body?.name) {
+    throw new ApiError(400, "Name is required");
   }
 
   let testimonialDoc = await Testimonial.findOne().sort({ createdAt: -1 });
