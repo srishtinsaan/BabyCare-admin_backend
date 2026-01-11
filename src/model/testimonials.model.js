@@ -11,7 +11,6 @@ const testimonialItemSchema = new Schema({
   },
   description: {
     type: String,
-    required: true,
   },
   imageUrl : {
     type: String,
