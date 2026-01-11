@@ -9,6 +9,8 @@ import blogsRoutes from "./routes/blogs.routes.js";
 import servicesRoutes from "./routes/services.routes.js";
 import teamRoutes from "./routes/teams.routes.js";
 import testimonialsRoutes from "./routes/testimonials.routes.js";
+import settingsRoutes from "./routes/settings.routes.js";
+
 
 const app = express()
 
@@ -38,6 +40,8 @@ app.use("/blogs", blogsRoutes);
 app.use("/services", servicesRoutes);
 app.use("/teams", teamRoutes);
 app.use("/testimonials", testimonialsRoutes);
+app.use("/settings", settingsRoutes);
+
 
 
 
