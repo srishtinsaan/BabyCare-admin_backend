@@ -4,6 +4,8 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import Team from "../model/teams.model.js"
 
+
+
 const getteams = asyncHandler(async (req, res) => {
   const team = await Team.findOne().sort({ createdAt: -1 });
 
@@ -26,7 +28,7 @@ const getteams = asyncHandler(async (req, res) => {
 
 const addteamItem = asyncHandler(async (req, res) => {
 
-  console.log("===> ADD team HIT", { url: req.originalUrl, method: req.method });
+console.log("===> ADD team HIT", { url: req.originalUrl, method: req.method });
 console.log("Content-Type:", req.headers["content-type"]);
 console.log("BODY:", req.body);
 console.log("FILES:", Object.keys(req.files || {}));
@@ -54,7 +56,6 @@ if (req.files) console.log("FILES DETAIL:", req.files)
   }
 
   
-
   const newteam = {
     name: req.body.name || "",
     designation: req.body.designation || "",
