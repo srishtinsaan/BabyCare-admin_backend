@@ -42,7 +42,7 @@ const updateusername = asyncHandler(async (req, res) => {
     setting.username = username;
   }
 
-  await setting.save();
+  await setting.save({ validateModifiedOnly: true });
 
   return res
     .status(200)
@@ -69,7 +69,7 @@ const updatepassword = asyncHandler(async (req, res) => {
     setting.password = password;
   }
 
-  await setting.save();
+  await setting.save({ validateModifiedOnly: true });
 
   return res
     .status(200)
