@@ -3,6 +3,24 @@ import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import Settings from "../model/settings.model.js"
 
+const getsettings = asyncHandler(async (req, res) => {
+  const setting = await Settings.findOne().sort({ createdAt: -1 });
+
+  if (!setting) {
+    return res.status(200).json(
+      new ApiResponse(200, {
+        username : "",
+        password : ""
+      }, "No setting data")
+    );
+  }
+
+  res.setHeader("Cache-Control", "no-store");
+
+  return res.status(200).json(
+    new ApiResponse(200, setting, "setting fetched successfully")
+  );
+});
 
 const updateusername = asyncHandler(async (req, res) => {
   const { username } = req.body;
@@ -55,7 +73,7 @@ const updatepassword = asyncHandler(async (req, res) => {
 
 
 export {
-  
+    getsettings,
     updateusername,
     updatepassword,
     

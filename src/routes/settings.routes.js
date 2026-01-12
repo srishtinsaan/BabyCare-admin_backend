@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+  getsettings,
   updateusername,
   updatepassword
 } from "../controllers/settings.controller.js";
@@ -8,6 +9,7 @@ import {
 
 const router = Router();
 
+router.get("/", getsettings);
 router.post("/newusername", updateusername);
 router.post("/newpassword", updatepassword);
 
