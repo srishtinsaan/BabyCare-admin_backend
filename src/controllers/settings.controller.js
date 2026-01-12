@@ -29,17 +29,20 @@ const updateusername = asyncHandler(async (req, res) => {
     throw new ApiError(400, "username cannot be empty");
   }
 
-  // Find latest setting row
-  const setting = await Settings.findOneAndUpdate(
-  {},
-  { username },
-  {
-    sort: { createdAt: -1 },
-    new: true,
-    upsert: true,
-  }
-);
+  let setting = await Settings.findOne().sort({ createdAt: -1 });
 
+  if (!setting) {
+    // NO settings existed before → create both fields
+    setting = new Settings({
+      username,
+      password: "admin123"   // temporary default
+    });
+  } else {
+    // UPDATE ONLY USERNAME
+    setting.username = username;
+  }
+
+  await setting.save();
 
   return res
     .status(200)
@@ -50,26 +53,29 @@ const updatepassword = asyncHandler(async (req, res) => {
   const { password } = req.body;
 
   if (!password) {
-    throw new ApiError(400, "Sub-heading cannot be empty");
+    throw new ApiError(400, "password cannot be empty");
   }
 
-  // Find latest setting row
   let setting = await Settings.findOne().sort({ createdAt: -1 });
 
-  if (setting) {
-    // Update existing document
-    setting.password = password;
-    await setting.save();
+  if (!setting) {
+    // NO settings existed before → create both fields
+    setting = new Settings({
+      username: "admin@babycare.com",      // temporary default
+      password
+    });
   } else {
-    // Create new document
-    setting = await Settings.create({ password });
+    // UPDATE ONLY PASSWORD
+    setting.password = password;
   }
 
+  await setting.save();
 
   return res
     .status(200)
-    .json(new ApiResponse(200, setting, "Sub-heading updated successfully"));
+    .json(new ApiResponse(200, setting, "password updated successfully"));
 });
+
 
 
 export {
