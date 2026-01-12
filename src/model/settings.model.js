@@ -2,14 +2,14 @@ import mongoose, { Schema } from "mongoose";
 
 const settingSchema = new Schema(
   {
-    new_username: {
+    username: {
       type: String,
       required: true,
       trim: true,
     },
     password: {
       type: String,
-      required: true,   // hashed password store hoga
+      required: true,   
     },
   },
   {
